@@ -1,0 +1,15 @@
+3603bbf79e2b2ed77ced1d2669c23f7b *DESCRIPTION
+6236146ed5fa5ec54fab6470f3aeb221 *LICENSE
+15aa37fbd79fdd4a871b43ce20c7dbc5 *NAMESPACE
+a7a8b8091f458f96cba2d39bc22e3842 *NEWS.md
+cdf07445d3d4bcf3870f932a6bbefe54 *R/find_data.R
+ba2132602356a1a8e26676087be0dbf2 *R/margins-package.R
+2a3155c4daffcb4980b7325017f73a33 *R/prediction.R
+c6ab0c20a1638837df64fde13e50a6b1 *R/prediction_methods.R
+3c125721287107e9b86f7df6fd6dfc7c *README.md
+d1d01392606164e25759713c1d2dfcd8 *inst/CITATION
+80ffd5819f7e928bb9412b3069021dad *man/find_data.Rd
+ad738af7a2ec68b22ce7b253f1de1efe *man/prediction-package.Rd
+b9883fac11b4ef0289bfd2b082ed5de0 *man/prediction.Rd
+3654c24de1c773caa482666f764b7360 *tests/testthat-prediction.R
+0b1dd7bda07095e5d73bf757d74db17d *tests/testthat/tests-core.R
