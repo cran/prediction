@@ -2,12 +2,35 @@
 % Please edit documentation in R/find_data.R
 \name{find_data}
 \alias{find_data}
+\alias{find_data.default}
+\alias{find_data.lm}
+\alias{find_data.glm}
+\alias{find_data.svyglm}
+\alias{find_data.merMod}
+\alias{find_data.crch}
+\alias{find_data.hxlr}
 \title{Extract data from a model object}
 \usage{
-find_data(model, env = parent.frame())
+find_data(model, ...)
+
+\method{find_data}{default}(model, env = parent.frame(), ...)
+
+\method{find_data}{lm}(model, env = parent.frame(), ...)
+
+\method{find_data}{glm}(model, env = parent.frame(), ...)
+
+\method{find_data}{svyglm}(model, ...)
+
+\method{find_data}{merMod}(model, env = parent.frame(), ...)
+
+\method{find_data}{crch}(model, env = parent.frame(), ...)
+
+\method{find_data}{hxlr}(model, env = parent.frame(), ...)
 }
 \arguments{
 \item{model}{The model object.}
+
+\item{\dots}{Additional arguments passed to methods.}
 
 \item{env}{An environment in which to look for the \code{data} argument to the modelling call.}
 }
@@ -24,6 +47,5 @@ find_data(x)
 
 }
 \seealso{
-\code{\link{prediction}}
+\code{\link{prediction}}, \code{\link{build_datalist}}, \code{\link{mean_or_mode}}, \code{\link{seq_range}}
 }
-

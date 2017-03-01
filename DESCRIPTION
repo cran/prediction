@@ -3,18 +3,26 @@ Type: Package
 Title: Tidy, Type-Safe 'prediction()' Methods
 Description: A one-function package containing 'prediction()', a type-safe alternative to 'predict()' that always returns a data frame.
 License: MIT + file LICENSE
-Version: 0.1.1
-Date: 2016-10-30
+Version: 0.1.10
+Date: 2017-02-14
 Authors@R: c(person("Thomas J.", "Leeper",
                     role = c("aut", "cre"),
-                    email = "thosjleeper@gmail.com"))
+                    email = "thosjleeper@gmail.com"),
+             person("Carl", "Ganz", role = "ctb",
+                    email = "carlganz@ucla.edu")
+            )
+URL: https://github.com/leeper/prediction
+BugReports: https://github.com/leeper/prediction/issues
 Imports: utils, stats
-Suggests: testthat
-Enhances: survival, nlme, AER
-RoxygenNote: 5.0.1
+Suggests: datasets, testthat
+Enhances: AER, betareg, crch, e1071, gam, glmx, lme4, nlme, nnet,
+        ordinal, quantreg, sampleSelection, survey (>= 3.31-5),
+        survival
+RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2016-10-30 18:37:01 UTC; THOMAS
-Author: Thomas J. Leeper [aut, cre]
+Packaged: 2017-03-01 11:26:41 UTC; THOMAS
+Author: Thomas J. Leeper [aut, cre],
+  Carl Ganz [ctb]
 Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
 Repository: CRAN
-Date/Publication: 2016-10-30 22:02:32
+Date/Publication: 2017-03-01 19:05:59
