@@ -1,8 +1,8 @@
-bc986b23bb0e8b459f05ec115ff7c070 *DESCRIPTION
+88d8cc7ac2892a068a12de10045d8823 *DESCRIPTION
 6236146ed5fa5ec54fab6470f3aeb221 *LICENSE
 586d0501d296730632a9addb6c300367 *NAMESPACE
-2425e76cc0baa5627d252dfc368bdfb8 *NEWS.md
-4ced6fdeab4cb1fd4f879ae5f71f5b17 *R/build_datalist.R
+ad4c70e3687ee43685680c0d3d86bbd3 *NEWS.md
+727e5f94b053e6c9bda3fa5a09c542a2 *R/build_datalist.R
 fd42ef4f8c4bb6f21be2cf50c5ec3264 *R/find_data.R
 bd9c266e31101ba042712aeef87ef7ed *R/mean_or_mode.R
 7bef9de89a662028a88a1dc85e1bee80 *R/prediction-package.R
@@ -33,7 +33,7 @@ bb4830cb7045107c35b36e03547c6e4f *R/prediction_survreg.R
 8726aa8675b46e411c8377d588c477db *R/prediction_svm.R
 6df0dcd0b9dec77e9a1cc59e47871827 *R/prediction_svyglm.R
 bb6f634c40dc31ef884b0c416c791b0d *R/seq_range.R
-ac718343d33b7f1c35e8a16e14816d05 *README.md
+7018c41f411f22cafd5f3d2e9dd919eb *README.md
 d1d01392606164e25759713c1d2dfcd8 *inst/CITATION
 b40e74c3deabf853be92e343ff579cbe *man/build_datalist.Rd
 f69f32f46f0f140e720b31b873f7b625 *man/find_data.Rd
