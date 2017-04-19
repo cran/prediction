@@ -1,10 +1,10 @@
 Package: prediction
 Type: Package
 Title: Tidy, Type-Safe 'prediction()' Methods
-Description: A one-function package containing 'prediction()', a type-safe alternative to 'predict()' that always returns a data frame.
+Description: A one-function package containing 'prediction()', a type-safe alternative to 'predict()' that always returns a data frame. The package currently supports common model types (e.g., "lm", "glm") from the 'stats' package, as well as numerous other model classes from other add-on packages. See the README or main package documentation page for a complete listing.
 License: MIT + file LICENSE
-Version: 0.1.11
-Date: 2017-03-21
+Version: 0.2.0
+Date: 2017-04-19
 Authors@R: c(person("Thomas J.", "Leeper",
                     role = c("aut", "cre"),
                     email = "thosjleeper@gmail.com"),
@@ -14,15 +14,15 @@ Authors@R: c(person("Thomas J.", "Leeper",
 URL: https://github.com/leeper/prediction
 BugReports: https://github.com/leeper/prediction/issues
 Imports: utils, stats
-Suggests: datasets, testthat
-Enhances: AER, betareg, crch, e1071, gam, glmx, lme4, nlme, nnet,
-        ordinal, quantreg, sampleSelection, survey (>= 3.31-5),
-        survival
+Suggests: datasets, methods, testthat
+Enhances: AER, betareg, brglm, crch, e1071, gam, gee, glmx, lme4, MASS,
+        mclogit, mlogit, mnlogit, MNP, nlme, nnet, ordinal, plm, pscl,
+        quantreg, sampleSelection, survey (>= 3.31-5), survival, VGAM
 RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2017-03-22 13:16:46 UTC; THOMAS
+Packaged: 2017-04-19 09:32:43 UTC; THOMAS
 Author: Thomas J. Leeper [aut, cre],
   Carl Ganz [ctb]
 Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
 Repository: CRAN
-Date/Publication: 2017-03-22 14:52:43 UTC
+Date/Publication: 2017-04-19 10:30:58 UTC

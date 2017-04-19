@@ -1,26 +1,21 @@
 #' @rdname prediction
 #' @export
-prediction.ar <- function(model, data, ...) {
+prediction.ar <- function(model, data, at = NULL, ...) {
     
     # extract predicted values
-    if (missing(data)) {
-        pred <- predict(object = model, se.fit = TRUE, ...)
+    if (missing(data) || is.null(data)) {
+        tmp <- predict(object = model, se.fit = TRUE, ...)
+        
     } else {
-        pred <- predict(object = model, newdata = data, se.fit = TRUE, ...)
+        tmp <- predict(model, newdata = data, se.fit = TRUE, ...)
     }
-    names(pred) <- c("fitted", "se.fitted")
-    class(pred[["fitted"]]) <- c("fit", "numeric")
-    class(pred[["se.fitted"]]) <- c("se.fit", "numeric")
+    pred <- data.frame(fitted = tmp[[1L]], se.fitted = tmp[[2L]])
     
-    # obs-x-(ncol(data)+2) data.frame of predictions
-    data <- data
-    structure(if (!length(data)) data.frame(pred) else cbind(data, pred), 
+    # obs-x-(ncol(data)+2) data frame
+    structure(pred, 
               class = c("prediction", "data.frame"), 
-              row.names = seq_len(length(pred[["fitted"]])),
+              row.names = seq_len(nrow(pred)),
+              at = if (is.null(at)) at else names(at), 
               model.class = class(model),
-              type = NULL)
+              type = NA_character_)
 }
-
-#' @rdname prediction
-#' @export
-prediction.arima0 <- prediction.ar

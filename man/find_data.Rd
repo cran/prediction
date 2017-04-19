@@ -3,17 +3,23 @@
 \name{find_data}
 \alias{find_data}
 \alias{find_data.default}
+\alias{find_data.data.frame}
 \alias{find_data.lm}
 \alias{find_data.glm}
 \alias{find_data.svyglm}
 \alias{find_data.merMod}
 \alias{find_data.crch}
 \alias{find_data.hxlr}
+\alias{find_data.vgam}
+\alias{find_data.vglm}
+\alias{find_data.mca}
 \title{Extract data from a model object}
 \usage{
 find_data(model, ...)
 
 \method{find_data}{default}(model, env = parent.frame(), ...)
+
+\method{find_data}{data.frame}(model, ...)
 
 \method{find_data}{lm}(model, env = parent.frame(), ...)
 
@@ -26,6 +32,12 @@ find_data(model, ...)
 \method{find_data}{crch}(model, env = parent.frame(), ...)
 
 \method{find_data}{hxlr}(model, env = parent.frame(), ...)
+
+\method{find_data}{vgam}(model, env = parent.frame(), ...)
+
+\method{find_data}{vglm}(model, env = parent.frame(), ...)
+
+\method{find_data}{mca}(model, env = parent.frame(), ...)
 }
 \arguments{
 \item{model}{The model object.}
@@ -35,10 +47,13 @@ find_data(model, ...)
 \item{env}{An environment in which to look for the \code{data} argument to the modelling call.}
 }
 \value{
-A data.frame, typically with one column unless the variable is a factor with more than two levels.
+A data frame containing the original data used in a modelling call, modified according to the original model's `subset` and `na.action` arguments, if appropriate.
 }
 \description{
-Find a model frame in a model object or try to reconstruct one
+Attempt to reconstruct the data used to create a model object
+}
+\details{
+This is a convenience function and, as such, carries no guarantees. To behave well, it typically requires that a model object be specified using a formula interface and an explicit \code{data} argument. Models that can be specified using variables from the \code{.GlobalEnv} or with a non-formula interface (e.g., a matrix of data) will tend to generate errors. \code{find_data} is an S3 generic so it is possible to expand it with new methods.
 }
 \examples{
 require("datasets")

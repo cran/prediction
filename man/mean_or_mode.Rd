@@ -2,31 +2,51 @@
 % Please edit documentation in R/mean_or_mode.R
 \name{mean_or_mode}
 \alias{mean_or_mode}
+\alias{mean_or_mode.default}
+\alias{mean_or_mode.numeric}
+\alias{mean_or_mode.data.frame}
 \alias{median_or_mode}
+\alias{median_or_mode.default}
+\alias{median_or_mode.numeric}
+\alias{median_or_mode.data.frame}
 \title{Class-dependent variable aggregation}
 \usage{
 mean_or_mode(x)
 
+\method{mean_or_mode}{default}(x)
+
+\method{mean_or_mode}{numeric}(x)
+
+\method{mean_or_mode}{data.frame}(x)
+
 median_or_mode(x)
+
+\method{median_or_mode}{default}(x)
+
+\method{median_or_mode}{numeric}(x)
+
+\method{median_or_mode}{data.frame}(x)
 }
 \arguments{
 \item{x}{A vector.}
 }
 \value{
-A numeric vector of length 1.
+A numeric or factor vector of length 1.
 }
 \description{
-Summarize a vector/variable into a single number, either a mean (median) for numeric vectors or the mode for categorical (factor or logical) vectors. Useful for aggregation.
+Summarize a vector/variable into a single number, either a mean (median) for numeric vectors or the mode for categorical (character, factor, ordered, or logical) vectors. Useful for aggregation.
 }
 \examples{
 require("datasets")
 # mean for numerics
-lapply(iris, mean_or_mode)
+mean_or_mode(iris)
+mean_or_mode(iris[["Sepal.Length"]])
+mean_or_mode(iris[["Species"]])
 
 # median for numerics
-lapply(iris, mean_or_mode)
+median_or_mode(iris)
 
 }
 \seealso{
-\code{\link{prediction}}
+\code{\link{prediction}}, \code{\link{build_datalist}}, \code{\link{seq_range}}
 }

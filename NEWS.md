@@ -1,3 +1,53 @@
+# CHANGES TO prediction 0.2.0
+
+* CRAN Release.
+* Added `mean_or_mode.data.frame()` and `median_or_mode.data.frame()` methods.
+
+# CHANGES TO prediction 0.1.17
+
+* Added `prediction.zeroinfl()` method for "zeroinfl" objects from **pscl**. (#1)
+* Added `prediction.hurdle()` method for "hurdle" objects from **pscl**. (#1)
+* Added `prediction.lme()` method for "lme" and "nlme" objects from **nlme**. (#1)
+* Documented `prediction.merMod()`.
+
+# CHANGES TO prediction 0.1.16
+
+* Added `prediction.plm()` method for "plm" objects from **plm**. (#1)
+
+# CHANGES TO prediction 0.1.15
+
+* Expanded test suite considerably and updated `CONTRIBUTING.md` to reflect expected test-driven development.
+* A few small code tweaks and bug fixes resulting from the updated test suite.
+
+# CHANGES TO prediction 0.1.14
+
+* Added `prediction.mnp()` method for "mnp" objects from **MNP**. (#1)
+* Added `prediction.mnlogit()` method for "mnlogit" objects from **mnlogit**. (#1)
+* Added `prediction.gee()` method for "gee" objects from **gee**. (#1)
+* Added `prediction.lqs()` method for "lqs" objects from **MASS**. (#1)
+* Added `prediction.mca()` method for "mca" objects from **MASS**. (#1)
+* Noted (built-in) support for "brglm" objects from **brglm** via the `prediction.glm()` method. (#1)
+
+# CHANGES TO prediction 0.1.13
+
+* Added a `category` argument to `prediction()` methods for models of multilevel outcomes (e.g., ordered probit, etc.) to be dictate which level is expressed as the `"fitted"` column. (#14)
+* Added an `at` argument to `prediction()` methods. (#13)
+* Made `mean_or_mode()` and `median_or_mode()` S3 generics.
+* Fixed a bug in `mean_or_mode()` and `median_or_mode()` where incorrect factor levels were being returned.
+
+# CHANGES TO prediction 0.1.12
+
+* Added `prediction.princomp()` method for "princomp" objects from **stats**. (#1)
+* Added `prediction.ppr()` method for "ppr" objects from **stats**. (#1)
+* Added `prediction.naiveBayes()` method for "naiveBayes" objects from **e1071**. (#1)
+* Added `prediction.rlm()` method for "rlm" objects from **MASS**. (#1)
+* Added `prediction.qda()` method for "qda" objects from **MASS**. (#1)
+* Added `prediction.lda()` method for "lda" objects from **MASS**. (#1)
+* `find_data()` now respects the `subset` argument in an original model call. (#15)
+* `find_data()` now respects the `na.action` argument in an original model call. (#15)
+* `find_data()` now gracefully fails when a model is specified without a formula. (#16)
+* `prediction()` methods no longer add a "fit" or "se.fit" class to any columns. Fitted values are identifiable by the column name only.
+
 # CHANGES TO prediction 0.1.11
 
 * `build_datalist()` now returns `at` value combinations as a list.
