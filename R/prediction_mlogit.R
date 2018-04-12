@@ -4,6 +4,7 @@ prediction.mlogit <-
 function(model, 
          data = find_data(model, parent.frame()), 
          at = NULL, 
+         calculate_se = FALSE,
          category, 
          ...) {
     
@@ -13,15 +14,19 @@ function(model,
         warning(sprintf("'data' is ignored for models of class '%s'", class(model)))
     }
     # setup data
-    out <- build_datalist(data, at = at)
-    for (i in seq_along(out)) {
-        tmp <- data.frame(predict(model, newdata = out[[i]], ...))
-        names(tmp) <- paste0("Pr(", seq_len(ncol(tmp)), ")")
-        out[[i]] <- cbind(out[[i]], tmp)
-        rm(tmp)
+    if (is.null(at)) {
+        out <- data
+    } else {
+        out <- build_datalist(data, at = at, as.data.frame = TRUE)
+        at_specification <- attr(out, "at_specification")
     }
-    pred <- do.call("rbind", out)
-
+    # calculate predictions
+    tmp <- make_data_frame(predict(model, newdata = out, ...))
+    names(tmp) <- paste0("Pr(", seq_len(ncol(tmp)), ")")
+    # cbind back together
+    pred <- make_data_frame(out, tmp)
+    rm(tmp)
+    
     # handle category argument
     if (missing(category)) {
         w <- grep("^Pr\\(", names(pred))[1L]
@@ -40,7 +45,7 @@ function(model,
     structure(pred,
               class = c("prediction", "data.frame"), 
               row.names = seq_len(nrow(pred)),
-              at = if (is.null(at)) at else names(at), 
+              at = if (is.null(at)) at else at_specification,
               model.class = class(model),
               type = NA_character_,
               category = category)

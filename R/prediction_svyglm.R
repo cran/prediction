@@ -5,6 +5,7 @@ function(model,
          data = find_data(model, parent.frame()), 
          at = NULL, 
          type = c("response", "link"), 
+         calculate_se = TRUE,
          ...) {
     
     type <- match.arg(type)
@@ -17,24 +18,22 @@ function(model,
                            se.fitted = sqrt(unname(attributes(pred)[["var"]])))
     } else {
         # setup data
-        out <- build_datalist(data, at = at)
-        for (i in seq_along(out)) {
-            tmp <- predict(model, 
-                           newdata = out[[i]], 
-                           type = type, 
-                           se.fit = TRUE,
-                           ...)
-            out[[i]] <- cbind(out[[i]], fitted = unclass(tmp), se.fitted = sqrt(unname(attributes(tmp)[["var"]])))
-            rm(tmp)
+        if (is.null(at)) {
+            out <- data
+        } else {
+            out <- build_datalist(data, at = at, as.data.frame = TRUE)
+            at_specification <- attr(out, "at_specification")
         }
-        pred <- do.call("rbind", out)
+        # calculate predictions
+        tmp <- predict(model, newdata = out, type = type, se.fit = TRUE, ...)
+        pred <- make_data_frame(out, fitted = unclass(tmp), se.fitted = sqrt(unname(attributes(tmp)[["var"]])))
     }
     
     # obs-x-(ncol(data)+2) data frame
     structure(pred, 
               class = c("prediction", "data.frame"), 
               row.names = seq_len(nrow(pred)),
-              at = if (is.null(at)) at else names(at), 
+              at = if (is.null(at)) at else at_specification,
               model.class = class(model),
               type = type)
 }

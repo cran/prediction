@@ -5,6 +5,7 @@ function(model,
          data = find_data(model, parent.frame()), 
          at = NULL, 
          type = c("response", "count", "prob", "zero"), 
+         calculate_se = FALSE,
          ...) {
     
     type <- match.arg(type)
@@ -13,28 +14,25 @@ function(model,
     data <- data
     if (missing(data) || is.null(data)) {
         pred <- predict(model, type = type, ...)
-        pred <- data.frame(fitted = pred[["fit"]])
+        pred <- make_data_frame(fitted = pred[["fit"]])
     } else {
         # setup data
-        out <- build_datalist(data, at = at)
-        for (i in seq_along(out)) {
-            tmp <- predict(model, 
-                           newdata = out[[i]], 
-                           type = type, 
-                           se.fit = TRUE,
-                           ...)
-            out[[i]] <- cbind(out[[i]], fitted = tmp)
-            rm(tmp)
+        if (is.null(at)) {
+            out <- data
+        } else {
+            out <- build_datalist(data, at = at, as.data.frame = TRUE)
+            at_specification <- attr(out, "at_specification")
         }
-        pred <- do.call("rbind", out)
+        # calculate predictions
+        pred <- predict(model, newdata = out, type = type, ...)
+        pred <- make_data_frame(out, fitted = pred, se.fitted = rep(NA_real_, nrow(out)))
     }
-    pred[["se.fitted"]] <- NA_real_
     
     # obs-x-(ncol(data)+2) data frame
     structure(pred, 
               class = c("prediction", "data.frame"), 
               row.names = seq_len(nrow(pred)),
-              at = if (is.null(at)) at else names(at), 
+              at = if (is.null(at)) at else at_specification,
               model.class = class(model),
               type = type)
 }

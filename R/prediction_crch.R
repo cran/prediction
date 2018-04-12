@@ -5,6 +5,7 @@ function(model,
          data = find_data(model), 
          at = NULL, 
          type = c("response", "location", "scale", "quantile"), 
+         calculate_se = FALSE,
          ...) {
     
     type <- match.arg(type)
@@ -12,27 +13,27 @@ function(model,
     # extract predicted values
     data <- data
     if (missing(data) || is.null(data)) {
-        pred <- data.frame(fitted = predict(model, type = type, ...),
-                           se.fitted = NA_real_)
+        pred <- make_data_frame(fitted = predict(model, type = type, ...),
+                                se.fitted = NA_real_)
     } else {
         # setup data
-        out <- build_datalist(data, at = at)
-        for (i in seq_along(out)) {
-            tmp <- predict(model, 
-                           newdata = out[[i]], 
-                           type = type, 
-                           ...)
-            out[[i]] <- cbind(out[[i]], fitted = tmp, se.fitted = rep(NA_real_, length(tmp)))
-            rm(tmp)
+        if (is.null(at)) {
+            out <- data
+        } else {
+            out <- build_datalist(data, at = at, as.data.frame = TRUE)
+            at_specification <- attr(out, "at_specification")
         }
-        pred <- do.call("rbind", out)
+        # calculate predictions
+        tmp <- predict(model, newdata = out, type = type, ...)
+        # cbind back together
+        pred <- make_data_frame(out, fitted = tmp, se.fitted = rep(NA_real_, length(tmp)))
     }
     
     # obs-x-(ncol(data)+2) data frame
     structure(pred, 
               class = c("prediction", "data.frame"), 
               row.names = seq_len(nrow(pred)),
-              at = if (is.null(at)) at else names(at), 
+              at = if (is.null(at)) at else at_specification,
               model.class = class(model),
               type = type)
 }

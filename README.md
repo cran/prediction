@@ -102,22 +102,36 @@ The currently supported model classes are:
  - "ar" from `stats::ar()`
  - "Arima" from `stats::arima()`
  - "arima0" from `stats::arima0()`
+ - "bigglm" from `biglm::bigglm()` (including `"ffdf"` backed models)
+ - "biglm" from `biglm::biglm()` (including `"ffdf"` backed models)
+ - "bigLm" from `bigLm::bigLm()`
  - "betareg" from `betareg::betareg()`
+ - "bruto" from `mda::bruto()`
  - "clm" from `ordinal::clm()`
  - "coxph" from `survival::coxph()`
  - "crch" from `crch::crch()`
- - "gam" from `gam::gam()`
+ - "earth" from `earth::earth()`
+ - "fda" from `mda::fda()`
+ - "Gam" from `gam::gam()`
+ - "gausspr" from `kernlab::gausspr()`
  - "gee" from `gee::gee()`
+ - "glimML" from `aod::betabin()`, `aod::negbin()`
+ - "glimQL" from `aod::quasibin()`, `aod::quasipois()`
  - "gls" from `nlme::gls()`
  - "hurdle" from `pscl::hurdle()`
  - "hxlr" from `crch::hxlr()`
  - "ivreg" from `AER::ivreg()`
+ - "knnreg" from `caret::knnreg()`
+ - "kqr" from `kernlab::kqr()`
+ - "ksvm" from `kernlab::ksvm()`
  - "lda" from `MASS:lda()`
  - "lme" from `nlme::lme()`
  - "loess" from `stats::loess()`
  - "lqs" from `MASS::lqs()`
+ - "mars" from `mda::mars()`
  - "mca" from `MASS::mca()`
  - "mclogit" from `mclogit::mclogit()`
+ - "mda" from `mda::mda()`
  - "merMod" from `lme4::lmer()` and `lme4::glmer()`
  - "mnlogit" from `mnlogit::mnlogit()`
  - "mnp" from `MNP::mnp()`
@@ -131,28 +145,33 @@ The currently supported model classes are:
  - "princomp" from `stats::princomp()`
  - "qda" from `MASS:qda()`
  - "rlm" from `MASS::rlm()`
+ - "rpart" from `rpart::rpart()`
  - "rq" from `quantreg::rq()`
  - "selection" from `sampleSelection::selection()`
+ - "speedglm" from `speedglm::speedglm()`
+ - "speedlm" from `speedglm::speedlm()`
  - "survreg" from `survival::survreg()`
  - "svm" from `e1071::svm()`
  - "svyglm" from `survey::svyglm()`
+ - "tobit" from `AER::tobit()`
+ - "train" from `caret::train()`
+ - "truncreg" from `truncreg::truncreg()`
  - "zeroinfl" from `pscl::zeroinfl()`
 
 ## Requirements and Installation
 
-[![CRAN](http://www.r-pkg.org/badges/version/prediction)](https://cran.r-project.org/package=prediction)
-![Downloads](http://cranlogs.r-pkg.org/badges/prediction)
+[![CRAN](https://www.r-pkg.org/badges/version/prediction)](https://cran.r-project.org/package=prediction)
+![Downloads](https://cranlogs.r-pkg.org/badges/prediction)
 [![Build Status](https://travis-ci.org/leeper/prediction.svg?branch=master)](https://travis-ci.org/leeper/prediction)
 [![Build status](https://ci.appveyor.com/api/projects/status/a4tebeoa98cq07gy/branch/master?svg=true)](https://ci.appveyor.com/project/leeper/prediction/branch/master)
-[![codecov.io](http://codecov.io/github/leeper/prediction/coverage.svg?branch=master)](http://codecov.io/github/leeper/prediction?branch=master)
+[![codecov.io](https://codecov.io/github/leeper/prediction/coverage.svg?branch=master)](https://codecov.io/github/leeper/prediction?branch=master)
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 
-The development version of this package can be installed directly from GitHub using `ghit`:
+The development version of this package can be installed directly from GitHub using `remotes`:
 
-```R
-if (!require("ghit")) {
-    install.packages("ghit")
-    library("ghit")
+``` r
+if (!require("remotes")) {
+    install.packages("remotes")
 }
-install_github("leeper/prediction")
+remotes::install_github("leeper/prediction")
 ```

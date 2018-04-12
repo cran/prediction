@@ -1,31 +1,32 @@
 #' @rdname prediction
 #' @export
-prediction.princomp <- function(model, data = find_data(model, parent.frame()), at = NULL, ...) {
+prediction.princomp <- function(model, data = find_data(model, parent.frame()), at = NULL, calculate_se = FALSE, ...) {
     
     # extract predicted values
     data <- data
     if (missing(data) || is.null(data)) {
-        pred <- data.frame(predict(model, ...))
+        pred <- make_data_frame(predict(model, ...))
     } else {
         # setup data
-        out <- build_datalist(data, at = at)
-        for (i in seq_along(out)) {
-            tmp <- predict(model, 
-                           newdata = out[[i]], 
-                           ...)
-            out[[i]] <- cbind(out[[i]], tmp)
-            rm(tmp)
+        if (is.null(at)) {
+            out <- data
+        } else {
+            out <- build_datalist(data, at = at, as.data.frame = TRUE)
+            at_specification <- attr(out, "at_specification")
         }
-        pred <- do.call("rbind", out)
+        # calculate predictions
+        tmp <- predict(model,
+                       newdata = out,
+                       ...)
+        # cbind back together
+        pred <- make_data_frame(out, tmp, fitted = rep(NA_real_, nrow(out)), se.fitted = rep(NA_real_, nrow(out)))
     }
-    pred[["fitted"]] <- NA_real_
-    pred[["se.fitted"]] <- NA_real_
     
     # obs-x-(ncol(data)+2) data frame
     structure(pred, 
               class = c("prediction", "data.frame"), 
               row.names = seq_len(nrow(pred)),
-              at = if (is.null(at)) at else names(at), 
+              at = if (is.null(at)) at else at_specification,
               model.class = class(model),
               type = NA_character_)
 }

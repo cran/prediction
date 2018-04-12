@@ -1,38 +1,54 @@
 #' @title Build list of data.frames
 #' @description Construct a list of data.frames based upon an input data.frame and a list of one or more \code{at} values
 #' @param data A data.frame containing the original data.
-#' @param at A list of one or more named vectors of values, which will be used to specify values of variables in \code{data}. See examples.
+#' @param at A list of one or more named vectors of values, which will be used to specify values of variables in \code{data}. All possible combinations are generated. Alternatively, this can be a data frame of combination levels if only a subset of combinations are desired. See examples.
+#' @param as.data.frame A logical indicating whether to return a single stacked data frame rather than a list of data frames
 #' @param \dots Ignored.
-#' @return A list of data.frames.
+#' @return A list of data.frames, unless \code{as.data.frame = TRUE} in which case a single, stacked data frame is returned.
 #' @author Thomas J. Leeper
 #' @examples
 #' # basic examples
 #' require("datasets")
 #' build_datalist(head(mtcars), at = list(cyl = c(4, 6)))
 #'
-#' str(build_datalist(head(mtcars, at = list(cyl = c(4,6), wt = c(1,2,3)))))
+#' str(build_datalist(head(mtcars), at = list(cyl = c(4,6), wt = c(2.75,3,3.25))), 1)
+#'
+#' str(build_datalist(head(mtcars), at = data.frame(cyl = c(4,4), wt = c(2.75,3))))
 #'
 #' @keywords data manip
 #' @seealso \code{\link{find_data}}, \code{\link{mean_or_mode}}, \code{\link{seq_range}}
+#' @importFrom data.table rbindlist
 #' @export
 build_datalist <- 
 function(data,
          at = NULL, 
+         as.data.frame = FALSE,
          ...){
     
-    #names(data) <- clean_terms(names(data))
+    # check for `at` specification and `as.data.frame` arguments
     if (!is.null(at) && length(at) > 0) {
         # check `at` specification against data
         check_at(data, at)
         
         # setup list of data.frames based on at
         data_out <- set_data_to_at(data, at = at)
+        at_specification <- data_out[["at"]]
+        data_out <- data_out[["data"]]
+        
+        if (isTRUE(as.data.frame)) {
+            data_out <- data.table::rbindlist(data_out)
+        }
+        
+    } else if (isTRUE(as.data.frame)) {
+        # if `at` empty and `as.data.frame = TRUE`, simply return original data
+        data_out <- data
+        at_specification <- NULL
     } else {
         # if `at` empty, simply setup data.frame and return
         data_out <- list(data)
-        attr(data_out[[1]], "at") <- NULL
+        at_specification <- NULL
     }
-    data_out
+    return(structure(data_out, at_specification = at_specification))
 }
 
 check_at <- function(data, at) {
@@ -112,14 +128,19 @@ check_at_names <- function(namevec, at) {
 }
 
 # data.frame builder, given specified `at` values
+## returns the `at` combination as a data frame
 set_data_to_at <- function(data, at = NULL) {
     # expand `at` combinations
-    e <- expand.grid(at, KEEP.OUT.ATTRS = FALSE)
-    e <- split(e, unique(e))
+    if (inherits(at, "data.frame")) {
+        expanded <- at
+    } else {
+        expanded <- expand.grid(at, KEEP.OUT.ATTRS = FALSE)
+    }
+    e <- split(expanded, unique(expanded))
     data_out <- lapply(e, function(atvals) {
         dat <- data
         dat <- `[<-`(dat, , names(atvals), value = atvals)
         structure(dat, at = as.list(atvals))
     })
-    return(data_out)
+    return(list(data = data_out, at = expanded))
 }

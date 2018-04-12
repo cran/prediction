@@ -5,6 +5,7 @@ function(model,
          data = find_data(model, parent.frame()), 
          at = NULL, 
          type = NULL, 
+         calculate_se = FALSE,
          category, 
          ...) {
     
@@ -15,7 +16,7 @@ function(model,
     # extract predicted values
     data <- data
     if (missing(data) || is.null(data)) {
-        probs <- as.data.frame(predict(model, type = "prob", ...)[["p"]])
+        probs <- make_data_frame(predict(model, type = "prob", ...)[["p"]])
         names(probs) <- paste0("Pr(", names(probs), ")")
         tmp <- predict(model, type = "choice", ...)[["y"]]
         d <- dim(tmp)
@@ -26,20 +27,25 @@ function(model,
         pred <- probs
         rm(probs, tmp)
     } else {
-        out <- build_datalist(data, at = at)
-        for (i in seq_along(out)) {
-            tmp_probs <- as.data.frame(predict(model, newdata = data, type = "prob", ...)[["p"]])
-            names(tmp_probs) <- paste0("Pr(", names(tmp_probs), ")")
-            tmp <- predict(model, newdata = out[[i]], type = "choice", ...)[["y"]]
-            d <- dim(tmp)
-            if (length(d) == 3) {
-                stop("'prediction.mnp' only works when 'n.draws = 1'")
-            }
-            tmp_probs[["fitted.class"]] <- lapply(seq_len(d[1L]), function(i) tmp[i,])
-            out[[i]] <- cbind(out[[i]], tmp_probs)
-            rm(tmp, tmp_probs)
+        # setup data
+        if (is.null(at)) {
+            out <- data
+        } else {
+            out <- build_datalist(data, at = at, as.data.frame = TRUE)
+            at_specification <- attr(out, "at_specification")
         }
-        pred <- do.call("rbind", out)
+        # calculate predictions
+        tmp_probs <- make_data_frame(predict(model, newdata = out, type = "prob", ...)[["p"]])
+        names(tmp_probs) <- paste0("Pr(", names(tmp_probs), ")")
+        tmp <- predict(model, newdata = out, type = "choice", ...)[["y"]]
+        d <- dim(tmp)
+        if (length(d) == 3) {
+            stop("'prediction.mnp' only works when 'n.draws = 1'")
+        }
+        tmp_probs[["fitted.class"]] <- lapply(seq_len(d[1L]), function(i) tmp[i,])
+        # cbind back together
+        pred <- make_data_frame(out, tmp_probs)
+        rm(tmp, tmp_probs)
     }
     
     # handle category argument
@@ -60,7 +66,7 @@ function(model,
     structure(pred,
               class = c("prediction", "data.frame"), 
               row.names = seq_len(nrow(pred)),
-              at = if (is.null(at)) at else names(at), 
+              at = if (is.null(at)) at else at_specification,
               model.class = class(model),
               type = NA_character_,
               category = category)

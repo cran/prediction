@@ -5,6 +5,7 @@ function(model,
          data = find_data(model, parent.frame()), 
          at = NULL, 
          type = c("response", "link"), 
+         calculate_se = FALSE,
          category,
          ...) {
     
@@ -13,25 +14,23 @@ function(model,
     # extract predicted values
     data <- data
     if (missing(data) || is.null(data)) {
-        pred <- as.data.frame(predict(model, type = type, se.fit = FALSE, ...))
+        pred <- make_data_frame(predict(model, type = type, se.fit = FALSE, ...))
     } else {
         # setup data
-        out <- build_datalist(data, at = at)
-        for (i in seq_along(out)) {
-            tmp <- predict(model, 
-                           newdata = out[[i]], 
-                           type = type, 
-                           se.fit = FALSE,
-                           ...)
-            if (!is.null(dim(tmp))) {
-                tmp <- as.matrix(tmp, ncol = 1)
-            }
-            out[[i]] <- cbind(out[[i]], fitted = data.frame(tmp))
-            rm(tmp)
+        if (is.null(at)) {
+            out <- data
+        } else {
+            out <- build_datalist(data, at = at, as.data.frame = TRUE)
+            at_specification <- attr(out, "at_specification")
         }
-        pred <- do.call("rbind", out)
+        # calculate predictions
+        tmp <- predict(model, newdata = out, type = type, se.fit = FALSE, ...)
+        if (!is.null(dim(tmp))) {
+            tmp <- as.matrix(tmp, ncol = 1)
+        }
+        # cbind back together
+        pred <- make_data_frame(out, fitted = make_data_frame(tmp), se.fitted = rep(NA_real_, nrow(out)))
     }
-    pred[["se.fitted"]] <- NA_real_
     
     # handle category argument
     if (missing(category)) {
@@ -49,7 +48,7 @@ function(model,
     structure(pred, 
               class = c("prediction", "data.frame"), 
               row.names = seq_len(nrow(pred)),
-              at = if (is.null(at)) at else names(at), 
+              at = if (is.null(at)) at else at_specification, 
               model.class = class(model),
               type = type,
               category = category)

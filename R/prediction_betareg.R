@@ -5,6 +5,7 @@ function(model,
          data = find_data(model, parent.frame()),
          at = NULL, 
          type = c("response", "link", "precision", "variance", "quantile"), 
+         calculate_se = FALSE,
          ...) {
     
     type <- match.arg(type)
@@ -12,33 +13,31 @@ function(model,
     # extract predicted value
     data <- data
     if (missing(data) || is.null(data)) {
-        pred <- data.frame(fitted = predict(model, type = type, ...), 
-                           se.fitted = NA_real_)
+        pred <- make_data_frame(fitted = predict(model, type = type, ...), 
+                                se.fitted = NA_real_)
     } else {
         # reduce memory profile
         model[["model"]] <- NULL
         attr(model[["terms"]], ".Environment") <- NULL
-    
+        
         # setup data
-        out <- build_datalist(data, at = at)
-        for (i in seq_along(out)) {
-            tmp <- predict(model, 
-                           newdata = out[[i]], 
-                           type = type, 
-                           ...)
-            out[[i]] <- cbind(out[[i]], fitted = tmp, se.fitted = rep(NA_real_, length(tmp)))
-            rm(tmp)
+        if (is.null(at)) {
+            out <- data
+        } else {
+            out <- build_datalist(data, at = at, as.data.frame = TRUE)
+            at_specification <- attr(out, "at_specification")
         }
-        pred <- do.call("rbind", out)
-        names(pred)[names(pred) == "fit"] <- "fitted"
-        names(pred)[names(pred) == "se.fit"] <- "se.fitted"
+        # calculate predictions
+        pred <- predict(model, newdata = out, type = type, ...)
+        # cbind back together
+        pred <- make_data_frame(out, fitted = pred, se.fitted = rep(NA_real_, length(pred)))
     }
     
     # obs-x-(ncol(data)+2) data frame
     structure(pred, 
               class = c("prediction", "data.frame"), 
               row.names = seq_len(nrow(pred)),
-              at = if (is.null(at)) at else names(at), 
+              at = if (is.null(at)) at else at_specification,
               model.class = class(model),
               type = type)
 }

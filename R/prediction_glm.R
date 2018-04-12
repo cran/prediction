@@ -5,6 +5,7 @@ function(model,
          data = find_data(model, parent.frame()), 
          at = NULL, 
          type = c("response", "link"), 
+         calculate_se = TRUE,
          ...) {
     
     type <- match.arg(type)
@@ -12,32 +13,38 @@ function(model,
     # extract predicted values
     data <- data
     if (missing(data) || is.null(data)) {
-        pred <- predict(model, type = type, se.fit = TRUE, ...)
-        pred <- data.frame(fitted = pred[["fit"]], se.fitted = pred[["se.fit"]])
+        if (isTRUE(calculate_se)) {
+            pred <- predict(model, type = type, se.fit = TRUE, ...)
+            pred <- make_data_frame(fitted = pred[["fit"]], se.fitted = pred[["se.fit"]])
+        } else {
+            pred <- predict(model, type = type, se.fit = FALSE, ...)
+            pred <- make_data_frame(fitted = pred, se.fitted = rep(NA_real_, length(pred)))
+        }
     } else {
         # reduce memory profile
         model[["model"]] <- NULL
         attr(model[["terms"]], ".Environment") <- NULL
-    
+        
         # setup data
-        out <- build_datalist(data, at = at)
-        for (i in seq_along(out)) {
-            tmp <- predict(model, 
-                           newdata = out[[i]], 
-                           type = type, 
-                           se.fit = TRUE,
-                           ...)
-            out[[i]] <- cbind(out[[i]], fitted = tmp[["fit"]], se.fitted = tmp[["se.fit"]])
-            rm(tmp)
+        out <- build_datalist(data, at = at, as.data.frame = TRUE)
+        at_specification <- attr(out, "at_specification")
+        # calculate predictions
+        if (isTRUE(calculate_se)) {
+            tmp <- predict(model, newdata = out, type = type, se.fit = TRUE, ...)
+            # cbind back together
+            pred <- make_data_frame(out, fitted = tmp[["fit"]], se.fitted = tmp[["se.fit"]])
+        } else {
+            tmp <- predict(model, newdata = out, type = type, se.fit = FALSE, ...)
+            # cbind back together
+            pred <- make_data_frame(out, fitted = tmp, se.fitted = rep(NA_real_, nrow(out)))
         }
-        pred <- do.call("rbind", out)
     }
     
     # obs-x-(ncol(data)+2) data frame
     structure(pred, 
               class = c("prediction", "data.frame"), 
               row.names = seq_len(nrow(pred)),
-              at = if (is.null(at)) at else names(at), 
+              at = if (is.null(at)) at else at_specification,
               model.class = class(model),
               type = type)
 }

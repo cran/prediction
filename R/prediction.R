@@ -6,6 +6,7 @@
 #' @param data A data.frame over which to calculate marginal effects. If missing, \code{\link{find_data}} is used to specify the data frame.
 #' @param at A list of one or more named vectors, specifically values at which to calculate the predictions. These are used to modify the value of \code{data} (see \code{\link{build_datalist}} for details on use).
 #' @param type A character string indicating the type of marginal effects to estimate. Mostly relevant for non-linear models, where the reasonable options are \dQuote{response} (the default) or \dQuote{link} (i.e., on the scale of the linear predictor in a GLM). For models of class \dQuote{polr} (from \code{\link[MASS]{polr}}), possible values are \dQuote{class} or \dQuote{probs}; both are returned.
+#' @param calculate_se A logical indicating whether to calculate standard errors (if possible). The output will always contain a \dQuote{calculate_se} column regardless of this value; this only controls the calculation of standard errors. Setting it to \code{FALSE} may improve speed.
 #' @param category For multi-level or multi-category outcome models (e.g., ordered probit, multinomial logit, etc.), a value specifying which of the outcome levels should be used for the \code{"fitted"} column. If missing, some default is chosen automatically.
 #' @param \dots Additional arguments passed to \code{\link[stats]{predict}} methods.
 #' @details This function is simply a wrapper around \code{\link[stats]{predict}} that returns a data frame containing the value of \code{data} and the predicted values with respect to all variables specified in \code{data}.
@@ -17,22 +18,36 @@
 #'   \item \dQuote{ar}, see \code{\link[stats]{ar}}
 #'   \item \dQuote{Arima}, see \code{\link[stats]{arima}}
 #'   \item \dQuote{arima0}, see \code{\link[stats]{arima0}}
+#'   \item \dQuote{bigglm}, see \code{\link[biglm]{bigglm}} (including \dQuote{ffdf}-backed models provided by \code{\link[ffbase]{bigglm.ffdf}})
+#'   \item \dQuote{biglm}, see \code{\link[biglm]{biglm}} (including \dQuote{ffdf}-backed models provided by \code{\link[ffbase]{bigglm.ffdf}})
+#'   \item \dQuote{bigLm}, see \code{\link[bigFastlm]{bigLm}}
 #'   \item \dQuote{betareg}, see \code{\link[betareg]{betareg}}
+#'   \item \dQuote{bruto}, see \code{\link[mda]{bruto}}
 #'   \item \dQuote{clm}, see \code{\link[ordinal]{clm}}
 #'   \item \dQuote{coxph}, see \code{\link[survival]{coxph}}
 #'   \item \dQuote{crch}, see \code{\link[crch]{crch}}
-#'   \item \dQuote{gam}, see \code{\link[gam]{gam}}
+#'   \item \dQuote{earth}, see \code{\link[earth]{earth}}
+#'   \item \dQuote{fda}, see \code{\link[mda]{fda}}
+#'   \item \dQuote{Gam}, see \code{\link[gam]{gam}}
+#'   \item \dQuote{gausspr}, see \code{\link[kernlab]{gausspr}}
 #'   \item \dQuote{gee}, see \code{\link[gee]{gee}}
 #'   \item \dQuote{gls}, see \code{\link[nlme]{gls}}
+#'   \item \dQuote{glimML}, see \code{\link[aod]{betabin}}, \code{\link[aod]{negbin}}
+#'   \item \dQuote{glimQL}, see \code{\link[aod]{quasibin}}, \code{\link[aod]{quasipois}}
 #'   \item \dQuote{hurdle}, see \code{\link[pscl]{hurdle}}
 #'   \item \dQuote{hxlr}, see \code{\link[crch]{hxlr}}
 #'   \item \dQuote{ivreg}, see \code{\link[AER]{ivreg}}
+#'   \item \dQuote{knnreg}, see \code{\link[caret]{knnreg}}
+#'   \item \dQuote{kqr}, see \code{\link[kernlab]{kqr}}
+#'   \item \dQuote{ksvm}, see \code{\link[kernlab]{ksvm}}
 #'   \item \dQuote{lda}, see \code{\link[MASS]{lda}}
 #'   \item \dQuote{lme}, see \code{\link[nlme]{lme}}
 #'   \item \dQuote{loess}, see \code{\link[stats]{loess}}
 #'   \item \dQuote{lqs}, see \code{\link[MASS]{lqs}}
+#'   \item \dQuote{mars}, see \code{\link[mda]{mars}}
 #'   \item \dQuote{mca}, see \code{\link[MASS]{mca}}
 #'   \item \dQuote{mclogit}, see \code{\link[mclogit]{mclogit}}
+#'   \item \dQuote{mda}, see \code{\link[mda]{mda}}
 #'   \item \dQuote{merMod}, see \code{\link[lme4]{lmer}}, \code{\link[lme4]{glmer}}
 #'   \item \dQuote{mnlogit}, see \code{\link[mnlogit]{mnlogit}}
 #'   \item \dQuote{mnp}, see \code{\link[MNP]{mnp}}
@@ -42,19 +57,26 @@
 #'   \item \dQuote{nnet}, see \code{\link[nnet]{nnet}}
 #'   \item \dQuote{plm}, see \code{\link[plm]{plm}}
 #'   \item \dQuote{polr}, see \code{\link[MASS]{polr}}
+#'   \item \dQuote{polyreg}, see \code{\link[mda]{polyreg}}
 #'   \item \dQuote{ppr}, see \code{\link[stats]{ppr}}
 #'   \item \dQuote{princomp}, see \code{\link[stats]{princomp}}
 #'   \item \dQuote{qda}, see \code{\link[MASS]{qda}}
 #'   \item \dQuote{rlm}, see \code{\link[MASS]{rlm}}
+#'   \item \dQuote{rpart}, see \code{\link[rpart]{rpart}}
 #'   \item \dQuote{rq}, see \code{\link[quantreg]{rq}}
 #'   \item \dQuote{selection}, see \code{\link[sampleSelection]{selection}}
+#'   \item \dQuote{speedglm}, see \code{\link[speedglm]{speedglm}}
+#'   \item \dQuote{speedlm}, see \code{\link[speedglm]{speedlm}}
 #'   \item \dQuote{survreg}, see \code{\link[survival]{survreg}}
 #'   \item \dQuote{svm}, see \code{\link[e1071]{svm}}
 #'   \item \dQuote{svyglm}, see \code{\link[survey]{svyglm}}
+#'   \item \dQuote{tobit}, see \code{\link[AER]{tobit}}
+#'   \item \dQuote{train}, see \code{\link[caret]{train}}
+#'   \item \dQuote{truncreg}, see \code{\link[truncreg]{truncreg}}
 #'   \item \dQuote{zeroinfl}, see \code{\link[pscl]{zeroinfl}}
 #' }
 #' 
-#' @return A data frame with class \dQuote{prediction} that has a number of rows equal to number of rows in \code{data}, or a multiple thereof, if \code{!is.null(at)}. The return value contains \code{data} (possibly modified by \code{at} using \code{\link{build_datalist}}), plus a column containing fitted/predicted values (\code{"fitted"}) and a column containing the standard errors thereof (\code{"se.fitted"}). Additional columns may be reported depending on the object class.
+#' @return A data frame with class \dQuote{prediction} that has a number of rows equal to number of rows in \code{data}, or a multiple thereof, if \code{!is.null(at)}. The return value contains \code{data} (possibly modified by \code{at} using \code{\link{build_datalist}}), plus a column containing fitted/predicted values (\code{"fitted"}) and a column containing the standard errors thereof (\code{"calculate_se"}). Additional columns may be reported depending on the object class.
 #' @examples
 #' require("datasets")
 #' x <- lm(Petal.Width ~ Sepal.Length * Sepal.Width * Species, data = iris)
@@ -95,35 +117,44 @@ function(model,
          data = find_data(model, parent.frame()), 
          at = NULL, 
          type = "response", 
+         calculate_se = TRUE,
          ...) {
     
     # extract predicted values
     data <- data
     if (missing(data) || is.null(data)) {
-        pred <- predict(model, type = type, se.fit = TRUE, ...)
-        pred <- data.frame(fitted = pred[["fit"]], se.fitted = pred[["se.fit"]])
+        if (isTRUE(calculate_se)) {
+            pred <- predict(model, type = type, se.fit = TRUE, ...)
+            pred <- make_data_frame(fitted = pred[["fit"]], se.fitted = pred[["se.fit"]])
+        } else {
+            pred <- predict(model, type = type, se.fit = FALSE, ...)
+            pred <- make_data_frame(fitted = pred, se.fitted = rep(NA_real_, length(pred)))
+        }
     } else {
         # setup data
-        out <- build_datalist(data, at = at)
-        for (i in seq_along(out)) {
-            tmp <- predict(model, 
-                           newdata = out[[i]], 
-                           type = type, 
-                           se.fit = TRUE,
-                           ...)
-            out[[i]] <- cbind(out[[i]], fit = tmp[["fit"]], se.fit = tmp[["se.fit"]])
-            rm(tmp)
+        if (is.null(at)) {
+            data <- data
+        } else {
+            data <- build_datalist(data, at = at, as.data.frame = TRUE)
+            at_specification <- attr(data, "at_specification")
         }
-        pred <- do.call("rbind", out)
-        names(pred)[names(pred) == "fit"] <- "fitted"
-        names(pred)[names(pred) == "se.fit"] <- "se.fitted"
+        # calculate predictions
+        if (isTRUE(calculate_se)) {
+            tmp <- predict(model, newdata = data, type = type, se.fit = TRUE, ...)
+            # cbind back together
+            pred <- make_data_frame(data, fitted = tmp[["fit"]], se.fitted = tmp[["se.fit"]])
+        } else {
+            tmp <- predict(model, newdata = data, type = type, se.fit = FALSE, ...)
+            # cbind back together
+            pred <- make_data_frame(data, fitted = tmp, se.fitted = rep(NA_real_, nrow(data)))
+        }
     }
     
     # obs-x-(ncol(data)+2) data.frame of predictions
     structure(pred, 
               class = c("prediction", "data.frame"),
               row.names = seq_len(nrow(pred)),
-              at = if (is.null(at)) at else names(at), 
+              at = if (is.null(at)) at else at_specification,
               model.class = class(model),
               type = type)
 }

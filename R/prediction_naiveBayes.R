@@ -5,6 +5,7 @@ function(model,
          data = find_data(model, parent.frame()), 
          at = NULL, 
          type = NULL, 
+         calculate_se = FALSE,
          category, 
          ...) {
     
@@ -18,18 +19,18 @@ function(model,
     }
     
     # setup data
-    out <- build_datalist(data, at = at)
-    for (i in seq_along(out)) {
-        tmp <- predict(model, 
-                       newdata = out[[i]], 
-                       type = "class", 
-                       ...)
-        probs <- as.data.frame(predict(model, newdata = data, type = "raw", ...))
-        names(probs) <- paste0("Pr(", names(probs), ")")
-        out[[i]] <- cbind(out[[i]], probs, fitted.class = tmp)
-        rm(tmp, probs)
+    if (is.null(at)) {
+        out <- data
+    } else {
+        out <- build_datalist(data, at = at, as.data.frame = TRUE)
+        at_specification <- attr(out, "at_specification")
     }
-    pred <- do.call("rbind", out)
+    # calculate predictions
+    pred <- predict(model, newdata = out, type = "class", ...)
+    probs <- make_data_frame(predict(model, newdata = out, type = "raw", ...))
+    names(probs) <- paste0("Pr(", names(probs), ")")
+    # cbind back together
+    pred <- make_data_frame(out, probs, fitted.class = pred, se.fitted = rep(NA_real_, nrow(out)))
     
     # handle category argument
     if (missing(category)) {
@@ -43,13 +44,12 @@ function(model,
         }
         pred[["fitted"]] <- pred[[ w[1L] ]]
     }
-    pred[["se.fitted"]] <- NA_real_
     
     # obs-x-(ncol(data)+2+nlevels(outcome)) data frame
     structure(pred,
               class = c("prediction", "data.frame"), 
               row.names = seq_len(nrow(pred)),
-              at = if (is.null(at)) at else names(at), 
+              at = if (is.null(at)) at else at_specification,
               model.class = class(model),
               type = NA_character_,
               category = category)

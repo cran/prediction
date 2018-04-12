@@ -4,27 +4,32 @@ prediction.plm <-
 function(model, 
          data = find_data(model, parent.frame()), 
          at = NULL, 
+         calculate_se = FALSE,
          ...) {
     
     # extract predicted values
     data <- data
     if (missing(data) || is.null(data)) {
-        pred <- data.frame(fitted = predict(model, ...))
+        pred <- make_data_frame(fitted = predict(model, ...))
     } else {
         # setup data
-        out <- build_datalist(data, at = at)
-        for (i in seq_along(out)) {
-            out[[i]] <- cbind(out[[i]], fitted = predict(model, newdata = out[[i]], ...))
+        if (is.null(at)) {
+            out <- data
+        } else {
+            out <- build_datalist(data, at = at, as.data.frame = TRUE)
+            at_specification <- attr(out, "at_specification")
         }
-        pred <- do.call("rbind", out)
+        # calculate predictions
+        tmp <- predict(model, newdata = out, ...)
+        # cbind back together
+        pred <- make_data_frame(out, fitted = tmp, se.fitted = rep(NA_real_, nrow(out)))
     }
-    pred[["se.fitted"]] <- NA_real_
     
     # obs-x-(ncol(data)+2) data frame
     structure(pred, 
               class = c("prediction", "data.frame"),
               row.names = seq_len(nrow(pred)),
-              at = if (is.null(at)) at else names(at), 
+              at = if (is.null(at)) at else at_specification,
               model.class = class(model),
               type = NULL)
 }
