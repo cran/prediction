@@ -1,3 +1,20 @@
+# prediction 0.3.6
+
+* Small fixes for failing CRAN checks. (#25)
+* Remove `prediction.bigglm()` method (from **biglm**) due to failing tests. (#25)
+
+# prediction 0.3.5
+
+* Fixed a bug that required specifying `stats::poly()` rather than just `poly()` in model formulae. (#22)
+
+# prediction 0.3.4
+
+* Added `prediction.glmnet()` method for "glmnet" objects from **glmnet**. (#1)
+
+# prediction 0.3.3
+
+* `prediction.merMod()` gains an `re.form` argument to pass forward to `predict.merMod()`.
+
 # prediction 0.3.2
 
 * Fix typo in "speedglm" that was overwriting "glm" method.

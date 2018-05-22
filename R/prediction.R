@@ -19,7 +19,6 @@
 #'   \item \dQuote{Arima}, see \code{\link[stats]{arima}}
 #'   \item \dQuote{arima0}, see \code{\link[stats]{arima0}}
 #'   \item \dQuote{bigglm}, see \code{\link[biglm]{bigglm}} (including \dQuote{ffdf}-backed models provided by \code{\link[ffbase]{bigglm.ffdf}})
-#'   \item \dQuote{biglm}, see \code{\link[biglm]{biglm}} (including \dQuote{ffdf}-backed models provided by \code{\link[ffbase]{bigglm.ffdf}})
 #'   \item \dQuote{bigLm}, see \code{\link[bigFastlm]{bigLm}}
 #'   \item \dQuote{betareg}, see \code{\link[betareg]{betareg}}
 #'   \item \dQuote{bruto}, see \code{\link[mda]{bruto}}
@@ -31,6 +30,7 @@
 #'   \item \dQuote{Gam}, see \code{\link[gam]{gam}}
 #'   \item \dQuote{gausspr}, see \code{\link[kernlab]{gausspr}}
 #'   \item \dQuote{gee}, see \code{\link[gee]{gee}}
+#'   \item \dQuote{glmnet}, see \code{\link[glmnet]{glmnet}}
 #'   \item \dQuote{gls}, see \code{\link[nlme]{gls}}
 #'   \item \dQuote{glimML}, see \code{\link[aod]{betabin}}, \code{\link[aod]{negbin}}
 #'   \item \dQuote{glimQL}, see \code{\link[aod]{quasibin}}, \code{\link[aod]{quasipois}}

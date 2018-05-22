@@ -1,31 +1,33 @@
 #' @rdname prediction
+#' @param lambda For models of class \dQuote{glmnet}, a value of the penalty parameter at which predictions are required.
 #' @export
-prediction.speedglm <- 
-function(model, 
-         data = find_data(model, parent.frame()), 
-         at = NULL, 
-         type = c("response", "link"), 
-         calculate_se = FALSE,
-         ...) {
+prediction.glmnet <- 
+function(
+  model, 
+  data,
+  lambda = model[["lambda"]][1L],
+  at = NULL, 
+  type = c("response", "link"),
+  calculate_se = FALSE,
+  ...
+) {
+    
+    # glmnet models only operate with a matrix interface
     
     type <- match.arg(type)
     
     # extract predicted values
     data <- data
     if (missing(data) || is.null(data)) {
-        pred <- predict(model, type = type, ...)
-        pred <- make_data_frame(fitted = pred, se.fitted = rep(NA_real_, length(pred)))
+        warning(sprintf("'data' is required for models of class '%s'", class(model)))
     } else {
-        # reduce memory profile
-        model[["model"]] <- NULL
-        
         # setup data
         out <- build_datalist(data, at = at, as.data.frame = TRUE)
         at_specification <- attr(out, "at_specification")
         # calculate predictions
-        tmp <- predict(model, newdata = out, type = type, se.fit = FALSE, ...)
+        tmp <- predict(model, newx = out, type = type, s = lambda, ...)
         # cbind back together
-        pred <- make_data_frame(out, fitted = tmp, se.fitted = rep(NA_real_, nrow(out)))
+        pred <- make_data_frame(out, fitted = tmp[, 1L, drop = TRUE], se.fitted = rep(NA_real_, nrow(out)))
     }
     
     # obs-x-(ncol(data)+2) data frame
