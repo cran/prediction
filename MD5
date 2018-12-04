@@ -1,4 +1,4 @@
-33c7d2440a1ceda8c354fc1111d838de *DESCRIPTION
+b1848d0cb091c572571137925fde2632 *DESCRIPTION
 875ed094f58c0c1b2c38c2aecc6e1e9f *LICENSE
 aba6554e4f1a1365b07ba5440ef88993 *NAMESPACE
 1a6f2b6482c6eb07c66440b1f23a2b90 *NEWS.md
@@ -81,7 +81,7 @@ ca9ac657b19b846bd21d2a5488f1645e *R/utils.R
 7d518cae27e112cc4240f7058a0584e2 *man/build_datalist.Rd
 c22772da367a524088f9519c925c50b3 *man/find_data.Rd
 133a4501528cd3ade7a8cdb46dab023f *man/mean_or_mode.Rd
-b264f1cae0e0254f51b3563f58e19b69 *man/prediction.Rd
+56c025c138b5beeaea9eadb1c33e0217 *man/prediction.Rd
 bc55730250606031ee18b095eb840f5e *man/seq_range.Rd
 3654c24de1c773caa482666f764b7360 *tests/testthat-prediction.R
 4d7c7d803b404c321305c266ea190fe4 *tests/testthat/tests-build_datalist.R

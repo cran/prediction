@@ -3,7 +3,7 @@ Type: Package
 Title: Tidy, Type-Safe 'prediction()' Methods
 Description: A one-function package containing 'prediction()', a type-safe alternative to 'predict()' that always returns a data frame. The package currently supports common model types (e.g., "lm", "glm") from the 'stats' package, as well as numerous other model classes from other add-on packages. See the README or main package documentation page for a complete listing.
 License: MIT + file LICENSE
-Version: 0.3.6
+Version: 0.3.6.1
 Date: 2018-05-22
 Authors@R: c(person("Thomas J.", "Leeper",
                     role = c("aut", "cre"), 
@@ -16,17 +16,17 @@ URL: https://github.com/leeper/prediction
 BugReports: https://github.com/leeper/prediction/issues
 Imports: utils, stats, data.table
 Suggests: datasets, methods, testthat
-Enhances: AER, aod, betareg, bigFastlm, biglm, brglm, caret, crch,
-        e1071, earth, ff, ffbase, gam (>= 1.15), gee, glmnet, glmx,
-        kernlab, lme4, MASS, mclogit, mda, mlogit, mnlogit, MNP, nlme,
-        nnet, ordinal, plm, pscl, quantreg, rpart, sampleSelection,
-        speedglm, survey (>= 3.31-5), survival, truncreg, VGAM
+Enhances: AER, aod, betareg, biglm, brglm, caret, crch, e1071, earth,
+        ff, ffbase, gam (>= 1.15), gee, glmnet, glmx, kernlab, lme4,
+        MASS, mclogit, mda, mlogit, mnlogit, MNP, nlme, nnet, ordinal,
+        plm, pscl, quantreg, rpart, sampleSelection, speedglm, survey
+        (>= 3.31-5), survival, truncreg, VGAM
 ByteCompile: true
 RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2018-05-22 10:02:13 UTC; THOMAS
-Author: Thomas J. Leeper [aut, cre] (<https://orcid.org/0000-0003-4097-6326>>),
+Packaged: 2018-12-04 08:46:11 UTC; ripley
+Author: Thomas J. Leeper [aut, cre] (<https://orcid.org/0000-0003-4097-6326>),
   Carl Ganz [ctb]
 Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
 Repository: CRAN
-Date/Publication: 2018-05-22 11:33:01 UTC
+Date/Publication: 2018-12-04 08:48:44 UTC
