@@ -19,7 +19,6 @@
 #'   \item \dQuote{Arima}, see \code{\link[stats]{arima}}
 #'   \item \dQuote{arima0}, see \code{\link[stats]{arima0}}
 #'   \item \dQuote{bigglm}, see \code{\link[biglm]{bigglm}} (including \dQuote{ffdf}-backed models provided by \code{\link[ffbase]{bigglm.ffdf}})
-#'   \item \dQuote{bigLm}, see \code{\link[bigFastlm]{bigLm}}
 #'   \item \dQuote{betareg}, see \code{\link[betareg]{betareg}}
 #'   \item \dQuote{bruto}, see \code{\link[mda]{bruto}}
 #'   \item \dQuote{clm}, see \code{\link[ordinal]{clm}}
@@ -49,7 +48,6 @@
 #'   \item \dQuote{mclogit}, see \code{\link[mclogit]{mclogit}}
 #'   \item \dQuote{mda}, see \code{\link[mda]{mda}}
 #'   \item \dQuote{merMod}, see \code{\link[lme4]{lmer}}, \code{\link[lme4]{glmer}}
-#'   \item \dQuote{mnlogit}, see \code{\link[mnlogit]{mnlogit}}
 #'   \item \dQuote{mnp}, see \code{\link[MNP]{mnp}}
 #'   \item \dQuote{naiveBayes}, see \code{\link[e1071]{naiveBayes}}
 #'   \item \dQuote{nlme}, see \code{\link[nlme]{nlme}}
