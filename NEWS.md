@@ -1,3 +1,30 @@
+# prediction 0.3.13
+
+* Fixed a bug in `prediction_glm` with the `data` argument (Issue #32).
+
+# prediction 0.3.12
+
+* Remove mnlogit dependency, as it has been removed from CRAN.
+
+# prediction 0.3.11
+
+* Remove bigFastLm dependency, as it has been removed from CRAN.
+
+# prediction 0.3.10
+
+* Added tests for `find_data()` and `prediction.lm()` to check for correct behavior in the presence of missing data (`na.action`) and `subset` arguments. (#28)
+
+# prediction 0.3.8
+
+* Provisional support for variances of average predictions for GLMs. (#17)
+* Added an example dataset, `margex`, borrowed from Stata's identically named data.
+
+# prediction 0.3.7
+
+* `summary(prediction(...))` now reports variances of average predictions, along with test statistics, p-values, and confidence intervals, where supported. (#17)
+* Added a function `prediction_summary()` which simply calls `summary(prediction(...))`.
+* All methods now return additional attributes.
+
 # prediction 0.3.6
 
 * Small fixes for failing CRAN checks. (#25)

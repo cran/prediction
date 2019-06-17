@@ -1,25 +1,22 @@
-#' @rdname prediction
-#' @export
-prediction.train <- 
+# @rdname prediction
+# @export
+prediction.bigLm <- 
 function(model, 
-         data = find_data(model),
-         at = NULL, 
-         type = c("raw", "prob"),
+         data = NULL,
+         calculate_se = FALSE,
          ...) {
-    
-    type <- match.arg(type)
     
     # extract predicted values
     data <- data
     if (missing(data) || is.null(data)) {
-        pred <- predict(model, type = type, se.fit = FALSE, ...)
+        pred <- predict(model, ...)
         pred <- make_data_frame(fitted = pred, se.fitted = rep(NA_real_, length(pred)))
     } else {
         # setup data
-        data <- build_datalist(data, at = at, as.data.frame = TRUE)
-        at_specification <- attr(data, "at_specification")
+        #data <- build_datalist(data, at = at, as.data.frame = TRUE)
+        #at_specification <- attr(data, "at_specification")
         # calculate predictions
-        tmp <- predict(model, newdata = data, type = type, se.fit = FALSE, ...)
+        tmp <- predict(model, newdata = data, ...)
         # cbind back together
         pred <- make_data_frame(data, fitted = tmp, se.fitted = rep(NA_real_, nrow(data)))
     }
@@ -30,8 +27,8 @@ function(model,
     # output
     structure(pred, 
               class = c("prediction", "data.frame"),
-              at = if (is.null(at)) at else at_specification,
-              type = type,
+              at = NULL,
+              type = "response",
               call = if ("call" %in% names(model)) model[["call"]] else NULL,
               model_class = class(model),
               row.names = seq_len(nrow(pred)),

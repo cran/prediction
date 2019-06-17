@@ -5,6 +5,7 @@ function(model,
          data = find_data(model, parent.frame()), 
          at = NULL, 
          type = "response",
+         vcov = stats::vcov(model),
          calculate_se = TRUE,
          ...) {
     
@@ -25,25 +26,60 @@ function(model,
         model[["model"]] <- NULL
         
         # setup data
-        data <- build_datalist(data, at = at, as.data.frame = TRUE)
-        at_specification <- attr(data, "at_specification")
+        datalist <- build_datalist(data, at = at, as.data.frame = TRUE)
+        at_specification <- attr(datalist, "at_specification")
         # calculate predictions
         if (isTRUE(calculate_se)) {
-            tmp <- predict(model, newdata = data, type = type, se.fit = TRUE, ...)
+            tmp <- predict(model, newdata = datalist, type = type, se.fit = TRUE, ...)
             # cbind back together
-            pred <- make_data_frame(data, fitted = tmp[["fit"]], se.fitted = tmp[["se.fit"]])
+            pred <- make_data_frame(datalist, fitted = tmp[["fit"]], se.fitted = tmp[["se.fit"]])
         } else {
-            tmp <- predict(model, newdata = data, type = type, se.fit = FALSE, ...)
+            tmp <- predict(model, newdata = datalist, type = type, se.fit = FALSE, ...)
             # cbind back together
-            pred <- make_data_frame(data, fitted = tmp, se.fitted = rep(NA_real_, nrow(data)))
+            pred <- make_data_frame(datalist, fitted = tmp, se.fitted = rep(NA_real_, nrow(datalist)))
         }
     }
     
-    # obs-x-(ncol(data)+2) data frame
+    # variance(s) of average predictions
+    if (isTRUE(calculate_se)) {
+        # handle case where SEs are calculated
+        J <- NULL
+        model_terms <- delete.response(terms(model))
+        if (is.null(at)) {
+            # no 'at_specification', so calculate variance of overall average prediction
+            model_frame <- model.frame(model_terms, data, na.action = na.pass, xlev = model$xlevels)
+            model_mat <- model.matrix(model_terms, model_frame, contrasts.arg = model$contrasts)
+            means_for_prediction <- colMeans(model_mat)
+            vc <- (means_for_prediction %*% vcov %*% means_for_prediction)[1L, 1L, drop = TRUE]
+        } else {
+            # with 'at_specification', calculate variance of all counterfactual predictions
+            datalist <- build_datalist(data, at = at, as.data.frame = FALSE)
+            vc <- unlist(lapply(datalist, function(one) {
+                model_frame <- model.frame(model_terms, one, na.action = na.pass, xlev = model$xlevels)
+                model_mat <- model.matrix(model_terms, model_frame, contrasts.arg = model$contrasts)
+                means_for_prediction <- colMeans(model_mat)
+                means_for_prediction %*% vcov %*% means_for_prediction
+            }))
+        }
+    } else {
+        # handle case where SEs are *not* calculated
+        J <- NULL
+        if (length(at)) {
+            vc <- rep(NA_real_, nrow(at_specification))
+        } else {
+            vc <- NA_real_
+        }
+    }
+    
+    # output
     structure(pred, 
               class = c("prediction", "data.frame"),
-              row.names = seq_len(nrow(pred)),
               at = if (is.null(at)) at else at_specification,
-              model.class = class(model),
-              type = type)
+              type = type,
+              call = if ("call" %in% names(model)) model[["call"]] else NULL,
+              model_class = class(model),
+              row.names = seq_len(nrow(pred)),
+              vcov = vc,
+              jacobian = J,
+              weighted = FALSE)
 }
