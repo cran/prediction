@@ -1,6 +1,6 @@
 # @rdname prediction
 # @export
-prediction.qda <- 
+.prediction_qda <- 
 function(model, 
          data = find_data(model, parent.frame()), 
          at = NULL, 

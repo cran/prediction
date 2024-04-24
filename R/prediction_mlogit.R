@@ -1,6 +1,6 @@
 # @rdname prediction
 # @export
-prediction.mlogit <- 
+.prediction_mlogit <- 
 function(model, 
          data = find_data(model, parent.frame()), 
          at = NULL, 

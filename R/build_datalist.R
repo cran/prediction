@@ -89,12 +89,20 @@ check_factor_levels <- function(data, at) {
 
 check_values <- function(data, at) {
     # drop variables not in `at`
-    dat <- data[, names(at), drop = FALSE]
+    if (inherits(data, "data.table")) {
+        dat <- data[, names(at), with = FALSE]
+    } else {
+        dat <- data[names(at)]
+    }
     
     # drop non-numeric variables from `dat` and `at`
     not_numeric <- !sapply(dat, class) %in% c("character", "factor", "ordered", "logical")
     at <- at[names(at) %in% names(dat)[not_numeric]]
-    dat <- dat[, not_numeric, drop = FALSE]
+    if (inherits(dat, "data.table")) {
+        dat <- dat[, which(not_numeric), with = FALSE]
+    } else {
+        dat <- dat[, not_numeric, drop = FALSE]
+    }
 
     if (length(dat) > 0 & length(at) > 0) {
         # calculate variable ranges
@@ -139,7 +147,23 @@ set_data_to_at <- function(data, at = NULL) {
     e <- split(expanded, unique(expanded))
     data_out <- lapply(e, function(atvals) {
         dat <- data
-        dat <- `[<-`(dat, , names(atvals), value = atvals)
+        for (i in seq_along(atvals)) {
+            is_factor <- inherits(dat[[names(atvals)[i]]], "factor")
+            if (is_factor) {
+                levs <- levels(dat[[names(atvals)[i]]])
+                if (inherits(dat, "data.table")) {
+                    dat[, names(atvals)[i]] <- factor(atvals[[i]], levels = levs)
+                } else {
+                    dat[names(atvals)[i]] <- factor(atvals[[i]], levels = levs)
+                }
+            } else{
+                if (inherits(dat, "data.table")) {
+                    dat[, names(atvals)[i]] <- atvals[[i]]
+                } else {
+                    dat[names(atvals)[i]] <- atvals[[i]]
+                }
+            }
+        }
         structure(dat, at = as.list(atvals))
     })
     return(list(data = data_out, at = expanded))

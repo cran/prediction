@@ -11,9 +11,16 @@ test_that("Test build_datalist()", {
     expect_warning(build_datalist(mtcars, at = list(cyl = 2)), label = "build_datalist() range warning")
 })
 
+test_that("Test build_datalist() with data.table", {
+    dt <- data.table::data.table(y=1:5, x=1:5)
+    expect_true(inherits(build_datalist(dt, at = list(x = 2)), "list"), label = "build_datalist(at = NULL) works with data.table")
+})
+
 test_that("Factors in build_datalist()", {
     mtcars$cyl <- factor(mtcars$cyl)
-    expect_true(inherits(build_datalist(mtcars, at = list(cyl = 4)), "list"), label = "build_datalist(at = factor()) works")
+    e <- build_datalist(mtcars, at = list(cyl = 4))
+    expect_true(inherits(e, "list"), label = "build_datalist(at = factor()) works")
+    expect_true(identical(levels(mtcars$cyl), levels(e[[1L]][["cyl"]])), label = "build_datalist(at = factor()) preserves factor levels")
     
     expect_error(build_datalist(mtcars, at = list(cyl = 7)), label = "build_datalist(at = ) errors on illegal factor level")
     

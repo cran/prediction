@@ -1,6 +1,6 @@
 # @rdname prediction
 # @export
-prediction.naiveBayes <- 
+.prediction_naiveBayes <- 
 function(model, 
          data = find_data(model, parent.frame()), 
          at = NULL, 

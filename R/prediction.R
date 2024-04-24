@@ -19,7 +19,7 @@
 #'   \item \dQuote{ar}, see \code{\link[stats]{ar}}
 #'   \item \dQuote{Arima}, see \code{\link[stats]{arima}}
 #'   \item \dQuote{arima0}, see \code{\link[stats]{arima0}}
-#'   \item \dQuote{bigglm}, see \code{\link[biglm]{bigglm}} (including \dQuote{ffdf}-backed models provided by \code{\link[ffbase]{bigglm.ffdf}})
+#'   \item \dQuote{bigglm}, see \code{\link[biglm]{bigglm}}
 #'   \item \dQuote{betareg}, see \code{\link[betareg]{betareg}}
 #'   \item \dQuote{bruto}, see \code{\link[mda]{bruto}}
 #'   \item \dQuote{clm}, see \code{\link[ordinal]{clm}}
@@ -75,7 +75,7 @@
 #'   \item \dQuote{zeroinfl}, see \code{\link[pscl]{zeroinfl}}
 #' }
 #' 
-#' Where implemented, \code{prediction} also returns average predictions (and the variances thereof). Variances are implemented using the delta method, as described in \url{http://indiana.edu/~jslsoc/stata/ci_computations/spost_deltaci.pdf}.
+#' Where implemented, \code{prediction} also returns average predictions (and the variances thereof). Variances are implemented using the delta method, as described in \url{https://jslsoc.sitehost.iu.edu/stata/ci_computations/spost_deltaci.pdf}.
 #' 
 #' @return A data frame with class \dQuote{prediction} that has a number of rows equal to number of rows in \code{data}, or a multiple thereof, if \code{!is.null(at)}. The return value contains \code{data} (possibly modified by \code{at} using \code{\link{build_datalist}}), plus a column containing fitted/predicted values (\code{"fitted"}) and a column containing the standard errors thereof (\code{"calculate_se"}). Additional columns may be reported depending on the object class. The data frame also carries attributes used by \code{print} and \code{summary}, which will be lost during subsetting.
 #' @examples

@@ -1,6 +1,6 @@
 # @rdname prediction
 # @export
-prediction.bigglm <- 
+.prediction_bigglm <- 
 function(model, 
          data = find_data(model, parent.frame()), 
          at = NULL, 

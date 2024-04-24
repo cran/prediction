@@ -1,6 +1,6 @@
 # @rdname prediction
 # @export
-prediction.bigLm <- 
+.prediction_bigLm <- 
 function(model, 
          data = NULL,
          calculate_se = FALSE,
