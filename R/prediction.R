@@ -75,7 +75,7 @@
 #'   \item \dQuote{zeroinfl}, see \code{\link[pscl]{zeroinfl}}
 #' }
 #' 
-#' Where implemented, \code{prediction} also returns average predictions (and the variances thereof). Variances are implemented using the delta method, as described in \url{https://jslsoc.sitehost.iu.edu/stata/ci_computations/spost_deltaci.pdf}.
+#' Where implemented, \code{prediction} also returns average predictions (and the variances thereof). Variances are implemented using the delta method, as described by Xu and Long 2005 \doi{10.1177/1536867X0500500405}.
 #' 
 #' @return A data frame with class \dQuote{prediction} that has a number of rows equal to number of rows in \code{data}, or a multiple thereof, if \code{!is.null(at)}. The return value contains \code{data} (possibly modified by \code{at} using \code{\link{build_datalist}}), plus a column containing fitted/predicted values (\code{"fitted"}) and a column containing the standard errors thereof (\code{"calculate_se"}). Additional columns may be reported depending on the object class. The data frame also carries attributes used by \code{print} and \code{summary}, which will be lost during subsetting.
 #' @examples
@@ -97,13 +97,12 @@
 #' prediction(x, at = lapply(iris, mean_or_mode))
 #' 
 #' # prediction with multi-category outcome
-#' \dontrun{
-#'   library("mlogit")
-#'   data("Fishing", package = "mlogit")
-#'   Fish <- mlogit.data(Fishing, varying = c(2:9), shape = "wide", choice = "mode")
-#'   mod <- mlogit(mode ~ price + catch, data = Fish)
-#'   prediction(mod)
-#'   prediction(mod, category = 3)
+#' if (requireNamespace("mlogit")) {
+#'     data("Fishing", package = "mlogit")
+#'     Fish <- mlogit.data(Fishing, varying = c(2:9), shape = "wide", choice = "mode")
+#'     mod <- mlogit(mode ~ price + catch, data = Fish)
+#'     prediction(mod)
+#'     prediction(mod, category = 3)
 #' }
 #' 
 #' @keywords models

@@ -141,6 +141,7 @@ The currently supported model classes are:
  - "mclogit" from `mclogit::mclogit()`
  - "mda" from `mda::mda()`
  - "merMod" from `lme4::lmer()` and `lme4::glmer()`
+ - "mnlogit" from `mnlogit::mnlogit()`
  - "mnp" from `MNP::mnp()`
  - "naiveBayes" from `e1071::naiveBayes()`
  - "nlme" from `nlme::nlme()`
@@ -169,6 +170,8 @@ The currently supported model classes are:
 
 [![CRAN](https://www.r-pkg.org/badges/version/prediction)](https://cran.r-project.org/package=prediction)
 ![Downloads](https://cranlogs.r-pkg.org/badges/prediction)
+[![Build status](https://ci.appveyor.com/api/projects/status/a4tebeoa98cq07gy/branch/master?svg=true)](https://ci.appveyor.com/project/leeper/prediction/branch/master)
+[![codecov.io](https://app.codecov.io/github/leeper/prediction?branch=master)](https://app.codecov.io/github/leeper/prediction?branch=master)
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
 The development version of this package can be installed directly from GitHub using `remotes`:

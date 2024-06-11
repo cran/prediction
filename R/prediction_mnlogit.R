@@ -1,6 +1,6 @@
-# @rdname prediction
-# @export
-.prediction_mnlogit <- 
+#' @rdname prediction
+#' @export
+prediction.mnlogit <- 
 function(model, 
          data = find_data(model, parent.frame()), 
          at = NULL, 
